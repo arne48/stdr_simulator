@@ -23,7 +23,7 @@
 #define STDR_APPLICATION
 
 #include <QDebug>
-#include <QApplication>
+#include <QApplication> 
 
 /**
 @namespace stdr_gui

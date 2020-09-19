@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.0.2)
 project(stdr_gui)
 
 find_package(catkin REQUIRED COMPONENTS
@@ -17,15 +17,16 @@ include_directories( include
   ${catkin_INCLUDE_DIRS}
 )
 
-find_package(Qt4 REQUIRED COMPONENTS
-  QtCore
-  QtGui
-  QtUiTools
-)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
 
-ADD_DEFINITIONS(-DQT_NO_KEYWORDS)
-
-include(${QT_USE_FILE})
+#Fix Core Discovery something is fishy
+find_package(Qt5 COMPONENTS
+  Core
+  Widgets
+  UiTools
+REQUIRED)
 
 include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
@@ -60,7 +61,7 @@ set(QT_FORMS
   ui/thermalSensorProperties.ui ui/soundSensorProperties.ui
 )
 
-QT4_WRAP_UI(QT_FORMS_HPP ${QT_FORMS})
+QT5_WRAP_UI(QT_FORMS_HPP ${QT_FORMS})
 
 QT_WRAP_CPP(stdr_gui_node SAMPLE_MOC_SRCS include/stdr_gui/stdr_gui_controller.h)
 QT_WRAP_CPP(stdr_gui_node SAMPLE_MOC_SRCS include/stdr_gui/stdr_gui_connector.h)
@@ -115,7 +116,9 @@ add_executable(stdr_gui_node
 add_dependencies(stdr_gui_node ${stdr_msgs_EXPORTED_TARGETS})  # Wait for stdr_msgs to build
 target_link_libraries(stdr_gui_node
   ${catkin_LIBRARIES}
-  ${QT_LIBRARIES}
+  Qt5::Core
+  Qt5::Widgets
+  Qt5::UiTools
 )
 
 # Install launch files
@@ -127,4 +130,3 @@ install(DIRECTORY launch resources
 install(TARGETS stdr_gui_node
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
-
