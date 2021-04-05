@@ -1,5 +1,8 @@
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.2.0)
 project(stdr_gui)
+
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -O0 -g")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2")
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
@@ -21,6 +24,10 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
+if (POLICY CMP0071)
+    cmake_policy(SET CMP0071 OLD)
+endif()
+
 #Fix Core Discovery something is fishy
 find_package(Qt5 COMPONENTS
   Core
@@ -33,8 +40,6 @@ include_directories(
 )
 
 catkin_package(
-  DEPENDS
-    QT
   CATKIN_DEPENDS
     roscpp
     roslib
@@ -111,7 +116,8 @@ add_executable(stdr_gui_node
   src/stdr_gui/stdr_map_metainformation/stdr_gui_thermal_source.cpp
   src/stdr_gui/stdr_map_metainformation/stdr_gui_rfid_tag.cpp
   src/stdr_gui/stdr_map_metainformation/stdr_gui_sound_source.cpp
-  ${QT_FORMS_HPP} ${SAMPLE_MOC_SRCS}
+  ${QT_FORMS_HPP}
+  ${SAMPLE_MOC_SRCS}
 )
 add_dependencies(stdr_gui_node ${stdr_msgs_EXPORTED_TARGETS})  # Wait for stdr_msgs to build
 target_link_libraries(stdr_gui_node

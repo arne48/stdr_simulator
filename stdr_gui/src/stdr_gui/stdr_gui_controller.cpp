@@ -134,7 +134,7 @@ namespace stdr_gui
     delete_sound_source_client_ = 
       n_.serviceClient<stdr_msgs::DeleteSoundSource>(
         "stdr_server/delete_sound_source");
-    
+
     QObject::connect(
       &gui_connector_,SIGNAL(setZoomInCursor(bool)),
       &map_connector_, SLOT(setCursorZoomIn(bool)));

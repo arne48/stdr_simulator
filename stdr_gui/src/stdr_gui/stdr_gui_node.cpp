@@ -42,7 +42,7 @@ int main(int argc,char **argv)
   signal(SIGTERM, signalHandler);
   signal(SIGINT, signalHandler);
   signal(SIGHUP, signalHandler);
-  
+
   con.init();
   app.exec();
   return 0;
