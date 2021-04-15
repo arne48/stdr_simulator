@@ -226,6 +226,8 @@ namespace stdr_gui
     connect(
       timer_, SIGNAL(timeout()), 
       this, SLOT(updateMapInternal()));
+    timer_->start(50);
+
       
     QObject::connect(
       this,SIGNAL(waitForRfidPose()),
@@ -516,8 +518,9 @@ namespace stdr_gui
     map_initialized_ = true;
     map_connector_.setMapInitialized(true);
     gui_connector_.setMapInitialized(true);
-    
-    timer_->start(50);
+
+    //Can't start here anymore because different thread
+    //timer_->start(50);
     
     robot_subscriber_ = n_.subscribe(
       "stdr_server/active_robots", 
@@ -1005,6 +1008,11 @@ namespace stdr_gui
   **/
   void CGuiController::updateMapInternal(void)
   {
+    if ( ! map_initialized_ )
+    {
+      return;
+    }
+
     while(map_lock_)
     {
       usleep(100);
